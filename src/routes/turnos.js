@@ -109,12 +109,21 @@ module.exports = (app) => {
             
             if (!e.TELEFONO_MOVIL) {
               e.TELEFONO_MOVIL = "595000";
+              e.estado_envio = 2
             } else {
               e.TELEFONO_MOVIL = e.TELEFONO_MOVIL.replace(0, "595");
             }
 
             // if (e.TELEFONO_MOVIL) {
             //   e.TELEFONO_MOVIL = e.TELEFONO_MOVIL.replace(0, "595");
+            // }
+
+            // Reemplazar por mi nro para probar el envio
+            // if (!e.TELEFONO_MOVIL) {
+            //   e.TELEFONO_MOVIL = "595000";
+            //   e.estado_envio = 2;
+            // } else {
+            //   e.TELEFONO_MOVIL = "595986153301";
             // }
 
             Turnos.create(e)
