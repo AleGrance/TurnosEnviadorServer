@@ -38,7 +38,7 @@ module.exports = (sequelize, DataType) => {
         },
         TELEFONO_MOVIL: {
             type: DataType.STRING,
-            allowNull: false
+            allowNull: true
         },
         PLAN_CLIENTE: {
             type: DataType.STRING,
@@ -46,6 +46,10 @@ module.exports = (sequelize, DataType) => {
         },
         NRO_CERT: {
             type: DataType.STRING,
+            allowNull: true
+        },
+        FECHA_CREACION: {
+            type: DataType.DATE,
             allowNull: true
         },
         estado_envio: {
