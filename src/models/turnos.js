@@ -6,57 +6,52 @@ module.exports = (sequelize, DataType) => {
             primaryKey: true,
             autoIncrement: true
         },
-        fecha_turno: {
-            type: DataType.DATEONLY,
+        COD_TURNO: {
+            type: DataType.INTEGER,
+            allowNull: false,
+            unique: true
+        },
+        FECHA: {
+            type: DataType.STRING,
             allowNull: false
         },
-        hora_turno: {
-            type: DataType.TIME,
+        HORA: {
+            type: DataType.STRING,
             allowNull: false
         },
-        comentario: {
+        // Doctor
+        NOMBRE_COMERCIAL: {
+            type: DataType.STRING,
+            allowNull: false
+        },
+        SUCURSAL: {
+            type: DataType.STRING,
+            allowNull: false
+        },
+        DIRECCION: {
             type: DataType.STRING,
             allowNull: true
         },
-        profesional: {
+        CLIENTE: {
             type: DataType.STRING,
             allowNull: false
         },
-        sucursal: {
+        TELEFONO_MOVIL: {
             type: DataType.STRING,
             allowNull: false
         },
-        dir_sucursal: {
+        PLAN_CLIENTE: {
             type: DataType.STRING,
             allowNull: true
         },
-        tel_sucursal: {
-            type: DataType.STRING,
-            allowNull: true
-        },
-        cliente: {
-            type: DataType.STRING,
-            allowNull: false
-        },
-        contacto_cliente: {
-            type: DataType.STRING,
-            allowNull: false
-        },
-        plan_cliente: {
-            type: DataType.STRING,
-            allowNull: true
-        },
-        nro_cert_cliente: {
-            type: DataType.STRING,
-            allowNull: true
-        },
-        usuario: {
+        NRO_CERT: {
             type: DataType.STRING,
             allowNull: true
         },
         estado_envio: {
             type: DataType.INTEGER,
-            allowNull: false
+            allowNull: false,
+            defaultValue: 0
         }
     });
 
@@ -64,7 +59,8 @@ module.exports = (sequelize, DataType) => {
         Turnos.belongsTo(models.Users, {
             foreignKey: {
                 name: 'user_id',
-                allowNull: false
+                allowNull: true,
+                defaultValue: 1
               }
         });
     };
