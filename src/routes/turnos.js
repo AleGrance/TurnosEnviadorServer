@@ -106,17 +106,12 @@ module.exports = (app) => {
 
           // Recorre el array que contiene los datos e inserta en la base de postgresql
           result.forEach((e) => {
-            
             if (!e.TELEFONO_MOVIL) {
               e.TELEFONO_MOVIL = "595000";
-              e.estado_envio = 2
+              e.estado_envio = 2;
             } else {
               e.TELEFONO_MOVIL = e.TELEFONO_MOVIL.replace(0, "595");
             }
-
-            // if (e.TELEFONO_MOVIL) {
-            //   e.TELEFONO_MOVIL = e.TELEFONO_MOVIL.replace(0, "595");
-            // }
 
             // Reemplazar por mi nro para probar el envio
             // if (!e.TELEFONO_MOVIL) {
