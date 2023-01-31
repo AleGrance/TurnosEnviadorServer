@@ -54,7 +54,7 @@ module.exports = (app) => {
   // Turnos no enviados - estado_envio distinto de 0
   app.route("/turnosNoEnviados").get((req, res) => {
     Turnos.findAll({
-      where: { estado_envio: { [Op.in]: [2, 6] } },
+      where: { estado_envio: { [Op.in]: [2, 3] } },
       order: [["createdAt", "DESC"]],
     })
       .then((result) => res.json(result))
