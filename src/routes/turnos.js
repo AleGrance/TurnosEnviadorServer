@@ -107,23 +107,35 @@ module.exports = (app) => {
 
           // Recorre el array que contiene los datos e inserta en la base de postgresql
           result.forEach((e) => {
+            // Si el nro de cert trae NULL cambiar por 000000
             if (!e.NRO_CERT) {
               e.NRO_CERT = "000000";
             }
-            if (!e.TELEFONO_MOVIL) {
-              e.TELEFONO_MOVIL = "595000";
-              e.estado_envio = 2;
-            } else {
-              e.TELEFONO_MOVIL = e.TELEFONO_MOVIL.replace(0, "595");
+            // Si la hora viene por ej: 11:0 entonces agregar el 0 al final
+            if (e.HORA[3] === "0") {
+              e.HORA = e.HORA + "0";
+            }
+            // Si la hora viene por ej: 10:3 o 11:2 entonces agregar el 0 al final
+            if (e.HORA.length === 4 && e.HORA[0] === "1") {
+              e.HORA = e.HORA + "0";
             }
 
-            // Reemplazar por mi nro para probar el envio
+            // Si el nro de tel trae NULL cambiar por 595000 y cambiar el estado a 2
+            // Si no reemplazar el 0 por el 595
             // if (!e.TELEFONO_MOVIL) {
             //   e.TELEFONO_MOVIL = "595000";
             //   e.estado_envio = 2;
             // } else {
-            //   e.TELEFONO_MOVIL = "595986153301";
+            //   e.TELEFONO_MOVIL = e.TELEFONO_MOVIL.replace(0, "595");
             // }
+
+            // Reemplazar por mi nro para probar el envio
+            if (!e.TELEFONO_MOVIL) {
+              e.TELEFONO_MOVIL = "595000";
+              e.estado_envio = 2;
+            } else {
+              e.TELEFONO_MOVIL = "595986153301";
+            }
 
             Turnos.create(e)
               //.then((result) => res.json(result))
