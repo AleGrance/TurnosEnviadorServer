@@ -99,6 +99,7 @@ module.exports = (app) => {
 
       // db = DATABASE
       db.query(
+        // Trae los ultimos 50 registros de turnos del JKMT
         "SELECT * FROM VW_RESUMEN_TURNOS_HOY ROWS 50",
         //"SELECT COUNT(*) FROM VW_RESUMEN_TURNOS_HOY",
         function (err, result) {
@@ -106,6 +107,9 @@ module.exports = (app) => {
 
           // Recorre el array que contiene los datos e inserta en la base de postgresql
           result.forEach((e) => {
+            if (!e.NRO_CERT) {
+              e.NRO_CERT = "000000";
+            }
             if (!e.TELEFONO_MOVIL) {
               e.TELEFONO_MOVIL = "595000";
               e.estado_envio = 2;
