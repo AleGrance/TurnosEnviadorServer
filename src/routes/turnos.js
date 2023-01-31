@@ -54,7 +54,7 @@ module.exports = (app) => {
   // Turnos no enviados - estado_envio distinto de 0
   app.route("/turnosNoEnviados").get((req, res) => {
     Turnos.findAll({
-      where: { estado_envio: {[Op.ne]:0} },
+      where: { estado_envio: { [Op.in]: [2, 6] } },
       order: [["createdAt", "DESC"]],
     })
       .then((result) => res.json(result))
@@ -134,23 +134,22 @@ module.exports = (app) => {
             if (e.HORA.length === 4 && e.HORA[0] === "1") {
               e.HORA = e.HORA + "0";
             }
-
             // Si el nro de tel trae NULL cambiar por 595000 y cambiar el estado a 2
             // Si no reemplazar el 0 por el 595
-            // if (!e.TELEFONO_MOVIL) {
-            //   e.TELEFONO_MOVIL = "595000";
-            //   e.estado_envio = 2;
-            // } else {
-            //   e.TELEFONO_MOVIL = e.TELEFONO_MOVIL.replace(0, "595");
-            // }
-
-            // Reemplazar por mi nro para probar el envio
             if (!e.TELEFONO_MOVIL) {
               e.TELEFONO_MOVIL = "595000";
               e.estado_envio = 2;
             } else {
-              e.TELEFONO_MOVIL = "595986153301";
+              e.TELEFONO_MOVIL = e.TELEFONO_MOVIL.replace(0, "595");
             }
+
+            // Reemplazar por mi nro para probar el envio
+            // if (!e.TELEFONO_MOVIL) {
+            //   e.TELEFONO_MOVIL = "595000";
+            //   e.estado_envio = 2;
+            // } else {
+            //   e.TELEFONO_MOVIL = "595986153301";
+            // }
 
             Turnos.create(e)
               //.then((result) => res.json(result))
