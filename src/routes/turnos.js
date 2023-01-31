@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 var Firebird = require("node-firebird");
 
 var odontos = {};
@@ -43,6 +44,20 @@ module.exports = (app) => {
       order: [["createdAt", "DESC"]],
     })
       .then((result) => res.json(result), injeccionFirebird())
+      .catch((error) => {
+        res.status(402).json({
+          msg: error.menssage,
+        });
+      });
+  });
+
+  // Turnos no enviados - estado_envio distinto de 0
+  app.route("/turnosNoEnviados").get((req, res) => {
+    Turnos.findAll({
+      where: { estado_envio: {[Op.ne]:0} },
+      order: [["createdAt", "DESC"]],
+    })
+      .then((result) => res.json(result))
       .catch((error) => {
         res.status(402).json({
           msg: error.menssage,
