@@ -13,6 +13,9 @@ odontos.role = null; // default
 odontos.retryConnectionInterval = 1000; // reconnect interval in case of connection drop
 odontos.blobAsText = false;
 
+// Fecha actual
+let fechaHoy = new Date();
+
 module.exports = (app) => {
   const Turnos = app.db.models.Turnos;
   const Users = app.db.models.Users;
@@ -51,11 +54,30 @@ module.exports = (app) => {
       });
   });
 
-  // Turnos no enviados - estado_envio distinto de 0
-  app.route("/turnosNoEnviados").get((req, res) => {
+  // Trae los turnos que ya fueron notificados via whatsapp por día
+  app.route("/turnosNotificados").get((req, res) => {
+    console.log(fechaHoy);
+    Turnos.findAndCountAll({
+      where: {
+        [Op.and]: [
+          { estado_envio: 1 },
+          {FECHA_CREACION: {[Op.between]:['2023-02-02 00:00:00', '2023-02-02 23:59:59']}}
+        ]
+      },
+      order: [["createdAt", "DESC"]],
+    })
+      .then((result) => res.json(result))
+      .catch((error) => {
+        res.status(402).json({
+          msg: error.menssage,
+        });
+      });
+  });
+
+  // Turnos no enviados - estado_envio 2 o 3
+  app.route("/turnosNoNotificados").get((req, res) => {
     Turnos.findAll({
       where: { estado_envio: { [Op.in]: [2, 3] } },
-      order: [["createdAt", "DESC"]],
     })
       .then((result) => res.json(result))
       .catch((error) => {
