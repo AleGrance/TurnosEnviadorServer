@@ -13,9 +13,6 @@ odontos.role = null; // default
 odontos.retryConnectionInterval = 1000; // reconnect interval in case of connection drop
 odontos.blobAsText = false;
 
-// Fecha actual
-let fechaHoy = new Date();
-
 module.exports = (app) => {
   const Turnos = app.db.models.Turnos;
   const Users = app.db.models.Users;
@@ -56,13 +53,21 @@ module.exports = (app) => {
 
   // Trae los turnos que ya fueron notificados via whatsapp por día
   app.route("/turnosNotificados").get((req, res) => {
-    console.log(fechaHoy);
+    // Fecha actual
+    let fecha = new Date().toISOString().slice(0, 10);
+    //let fechaHoy = fecha.getFullYear() + '-' + (fecha.getMonth() + 1) + '-' + fecha.getDate();
+    console.log(fecha);
+
     Turnos.findAndCountAll({
       where: {
         [Op.and]: [
           { estado_envio: 1 },
-          {FECHA_CREACION: {[Op.between]:['2023-02-02 00:00:00', '2023-02-02 23:59:59']}}
-        ]
+          {
+            FECHA_CREACION: {
+              [Op.between]: [fecha + " 00:00:00", fecha + " 23:59:59"],
+            },
+          },
+        ],
       },
       order: [["createdAt", "DESC"]],
     })
