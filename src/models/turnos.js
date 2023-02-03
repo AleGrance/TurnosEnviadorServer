@@ -52,6 +52,10 @@ module.exports = (sequelize, DataType) => {
             type: DataType.DATE,
             allowNull: true
         },
+        USUARIO_CREO_TURNO: {
+            type: DataType.STRING,
+            allowNull: true
+        },
         estado_envio: {
             type: DataType.INTEGER,
             allowNull: false,
