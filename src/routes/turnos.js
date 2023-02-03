@@ -149,11 +149,11 @@ module.exports = (app) => {
           result.forEach((e) => {
             // Si el nro de cert trae NULL cambiar por 000000
             if (!e.NRO_CERT) {
-              e.NRO_CERT = "SIN CERTIFICADO";
+              e.NRO_CERT = " ";
             }
             // Si no tiene plan
             if (!e.PLAN_CLIENTE) {
-              e.PLAN_CLIENTE = "SIN PLAN";
+              e.PLAN_CLIENTE = " ";
             }
             // Si la hora viene por ej: 11:0 entonces agregar el 0 al final
             if (e.HORA[3] === "0") {
