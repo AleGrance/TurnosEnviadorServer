@@ -53,23 +53,21 @@ module.exports = (app) => {
 
   // Trae los turnos que ya fueron notificados via whatsapp por día
   app.route("/turnosNotificados").get((req, res) => {
-    // Fecha actual
-    let fecha = new Date().toISOString().slice(0, 10);
-    //let fechaHoy = fecha.getFullYear() + '-' + (fecha.getMonth() + 1) + '-' + fecha.getDate();
-    console.log(fecha);
+    // Fecha de hoy
+    let fechaHoy = new Date().toISOString().slice(0, 10);
 
-    Turnos.findAndCountAll({
+    Turnos.count({
       where: {
         [Op.and]: [
           { estado_envio: 1 },
           {
             FECHA_CREACION: {
-              [Op.between]: [fecha + " 00:00:00", fecha + " 23:59:59"],
+              [Op.between]: [fechaHoy + " 00:00:00", fechaHoy + " 23:59:59"],
             },
           },
         ],
       },
-      order: [["createdAt", "DESC"]],
+      order: [["FECHA_CREACION", "DESC"]],
     })
       .then((result) => res.json(result))
       .catch((error) => {
