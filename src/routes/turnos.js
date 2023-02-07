@@ -53,7 +53,7 @@ module.exports = (app) => {
 
   // Trae los turnos que ya fueron notificados via whatsapp por día
   app.route("/turnosNotificados").get((req, res) => {
-    // Fecha de hoy
+    // Fecha de hoy 2022-02-30
     let fechaHoy = new Date().toISOString().slice(0, 10);
 
     Turnos.count({
