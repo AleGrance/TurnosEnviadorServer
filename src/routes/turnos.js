@@ -130,6 +130,8 @@ module.exports = (app) => {
 
   // Turnos no enviados - estado_envio 2 o 3
   app.route("/turnosNoNotificados").get((req, res) => {
+    // Fecha de hoy 2022-02-30
+    let fechaHoy = new Date().toISOString().slice(0, 10);
     Turnos.count({
       where: {
         [Op.and]: [
