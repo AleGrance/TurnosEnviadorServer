@@ -153,6 +153,50 @@ module.exports = (app) => {
       });
   });
 
+  // Trae la cantidad de turnos enviados por rango de fecha desde hasta
+  app.route("/turnosNoNotificadosFecha").post((req, res) => {
+    let fechaHoy = new Date().toISOString().slice(0, 10);
+    let { fecha_desde, fecha_hasta } = req.body;
+
+    if (fecha_desde === "" && fecha_hasta === "") {
+      fecha_desde = fechaHoy;
+      fecha_hasta = fechaHoy;
+    }
+
+    if (fecha_hasta == "") {
+      fecha_hasta = fecha_desde;
+    }
+
+    if (fecha_desde == "") {
+      fecha_desde = fecha_hasta;
+    }
+
+    console.log(req.body);
+
+    Turnos.count({
+      where: {
+        [Op.and]: [
+          { estado_envio: { [Op.in]: [2, 3] } },
+          {
+            updatedAt: {
+              [Op.between]: [
+                fecha_desde + " 00:00:00",
+                fecha_hasta + " 23:59:59",
+              ],
+            },
+          },
+        ],
+      },
+      //order: [["createdAt", "DESC"]],
+    })
+      .then((result) => res.json(result))
+      .catch((error) => {
+        res.status(402).json({
+          msg: error.menssage,
+        });
+      });
+  });
+
   app
     .route("/turnos/:id_turno")
     .get((req, res) => {
