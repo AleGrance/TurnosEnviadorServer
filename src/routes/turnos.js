@@ -13,6 +13,12 @@ odontos.role = null; // default
 odontos.retryConnectionInterval = 1000; // reconnect interval in case of connection drop
 odontos.blobAsText = false;
 
+// Horario laboral del enviador
+var horaEntrada = "7"; //AM
+var horaSalida = "20"; //PM
+//var tiempoRetrasoSQL = 10000;
+var tiempoRetrasoSQL = 10000 * 60;
+
 module.exports = (app) => {
   const Turnos = app.db.models.Turnos;
   const Users = app.db.models.Users;
@@ -37,13 +43,14 @@ module.exports = (app) => {
         .catch((error) => res.json(error));
     });
 
-  // Trae los turnos que tengan en el campo estado_envio = 0 indica que son los que aun no se han enviado por el enviador
+  // Trae los turnos que tengan en el campo estado_envio = 0
   app.route("/turnosPendientes").get((req, res) => {
     Turnos.findAll({
       where: { estado_envio: 0 },
       order: [["createdAt", "DESC"]],
+      //limit: 5
     })
-      .then((result) => res.json(result), injeccionFirebird())
+      .then((result) => res.json(result))
       .catch((error) => {
         res.status(402).json({
           msg: error.menssage,
@@ -61,7 +68,7 @@ module.exports = (app) => {
         [Op.and]: [
           { estado_envio: 1 },
           {
-            FECHA_CREACION: {
+            updatedAt: {
               [Op.between]: [fechaHoy + " 00:00:00", fechaHoy + " 23:59:59"],
             },
           },
@@ -134,6 +141,7 @@ module.exports = (app) => {
     });
 
   function injeccionFirebird() {
+    console.log("Se actualiza el PSQL");
     Firebird.attach(odontos, function (err, db) {
       if (err) throw err;
 
@@ -143,7 +151,7 @@ module.exports = (app) => {
         "SELECT * FROM VW_RESUMEN_TURNOS_HOY ROWS 50",
         //"SELECT COUNT(*) FROM VW_RESUMEN_TURNOS_HOY",
         function (err, result) {
-          console.log(result[0]);
+          console.log("Cant de turnos obtenidos del JKMT:", result.length);
 
           // Recorre el array que contiene los datos e inserta en la base de postgresql
           result.forEach((e) => {
@@ -191,4 +199,19 @@ module.exports = (app) => {
       );
     });
   }
+
+  setInterval(() => {
+    let hoyAhora = new Date();
+    let horaAhora = hoyAhora.getHours();
+    let diaHoy = hoyAhora.toString().slice(0, 3);
+    console.log("Hoy es:", diaHoy, "la hora es:", horaAhora);
+
+    if (horaAhora >= horaEntrada && horaAhora <= horaSalida) {
+      //this.mood = "Trabajando! 👨🏻‍💻";
+      injeccionFirebird();
+    } else {
+      //this.mood = "Durmiendo! 😴";
+      console.log("Ya no se consulta al JKMT!");
+    }
+  }, tiempoRetrasoSQL);
 };
