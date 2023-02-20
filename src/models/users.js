@@ -55,6 +55,10 @@ module.exports = (sequelize, DataType) => {
   };
 
   Users.associate = (models) => {
+    Users.hasMany(models.Historico);
+  };
+
+  Users.associate = (models) => {
     Users.belongsTo(models.Roles, {
       foreignKey: {
         name: "role_id",
