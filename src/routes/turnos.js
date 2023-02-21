@@ -47,7 +47,7 @@ module.exports = (app) => {
   app.route("/turnosPendientes").get((req, res) => {
     Turnos.findAll({
       where: { estado_envio: 0 },
-      order: [["createdAt", "DESC"]],
+      order: [["FECHA_CREACION", "ASC"]],
       //limit: 5
     })
       .then((result) => res.json(result))

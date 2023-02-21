@@ -5,15 +5,23 @@ module.exports = (sequelize, DataType) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    fecha: {
-      type: DataType.STRING,
+    anho: {
+      type: DataType.NUMERIC,
       allowNull: false,
     },
-    cantidad_enviados: {
+    mes: {
+      type: DataType.NUMERIC,
+      allowNull: false,
+    },
+    dia: {
+      type: DataType.NUMERIC,
+      allowNull: false,
+    },
+    cant_enviados: {
       type: DataType.BIGINT,
       allowNull: false,
     },
-    cantidad_no_enviados: {
+    cant_no_enviados: {
       type: DataType.BIGINT,
       allowNull: false,
     },
